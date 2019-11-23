@@ -11,5 +11,13 @@ namespace app\models;
 
 class Day
 {
+public $workingDay;
 
+    /**
+     * @return mixed
+     */
+    public function getWorkingDay()
+    {
+        return $this->workingDay;
+    }
 }

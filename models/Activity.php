@@ -9,7 +9,11 @@
 namespace app\models;
 
 
-class Activity
+use yii\base\Model;
+
+class Activity extends Model
 {
+ public $cycle;
+ public $main;
 
 }
