@@ -20,4 +20,5 @@ public $workingDay;
     {
         return $this->workingDay;
     }
+
 }
