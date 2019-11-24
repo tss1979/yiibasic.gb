@@ -21,4 +21,10 @@ public $workingDay;
         return $this->workingDay;
     }
 
+    public function isWorkingDay()
+
+    {
+
+    }
+
 }
