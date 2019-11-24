@@ -11,17 +11,20 @@ namespace app\models;
 
 class Day
 {
-public $workingDay;
+public $isWorkingDay;
 
     /**
      * @return mixed
      */
-    public function getWorkingDay()
+    /**
+     * @return mixed
+     */
+    public function getisWorkingDay()
     {
-        return $this->workingDay;
+        return $this->isWorkingDay;
     }
 
-    public function isWorkingDay()
+    public function countWorkingDays()
 
     {
 
