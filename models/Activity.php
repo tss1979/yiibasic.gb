@@ -15,5 +15,11 @@ class Activity extends Model
 {
  public $cycle;
  public $main;
+ public $user_id;
+ public $title;
+ public $started_at;
+ public $finished_at;
+ public $created_at;
+ public $updated_at;
 
 }

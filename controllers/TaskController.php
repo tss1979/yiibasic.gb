@@ -27,5 +27,34 @@ class TaskController extends \yii\web\Controller
         return $this->render('forms', ['model'=>$model]);
     }
 
+    public function actionFillDb()
+    {
+        for($i=1; $i < 5; $i++)
+        {
+            \Yii::$app->db->createCommand()->insert('activity',
+                [
+                    'title'=> "$i Activity",
+                    'created_at'=> time(),
+                    'started_at'=> time() + $i * 60 * 60 * 24,
+                    'finished_at'=> time() + ($i+1) * 60 * 60 * 24,
+                    'cycle'=> false,
+                    'main'=> false,
+                    'user_id' => $i,
+            ])->execute();
+        }
+    }
+
+    public function actionFillUsers()
+    {
+        for($i = 1; $i < 5; $i++)
+        {
+            \Yii::$app->db->createCommand()->insert('users',
+                [
+                    'username'=> "$i User",
+                    'password'=> $i . 'asdk' . $i*12 . 'qwe',
+                ])->execute();
+        }
+    }
+
 
 }
