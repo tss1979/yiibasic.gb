@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\models\User;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\ActivitySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -24,9 +25,52 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             'id',
             'title',
-            'started_at',
-            'finished_at',
-            'user_id',
+            [
+                'attribute'=>'started_at',
+                'filter'=>\kartik\date\DatePicker::widget([
+                        'model'=>$searchModel,
+                        'attribute'=>'started_at',
+                        'language'=>'ru',
+                        'pluginOptions'=>[
+                                'autoclose'=> true,
+                                'todayHighlight'=>true,
+                                'format'=>'dd.mm.yyy',
+                        ],
+                ]),
+                'value'=>function(\app\models\Activity $model)
+                {
+                    return Yii::$app->formatter->asDatetime($model->started_at);
+                }
+
+            ],
+            [
+                'attribute'=>'finished_at',
+                'filter'=>\kartik\date\DatePicker::widget([
+                    'model'=>$searchModel,
+                    'attribute'=>'finished_at',
+                    'language'=>'ru',
+                    'pluginOptions'=>[
+                        'autoclose'=> true,
+                        'todayHighlight'=>true,
+                        'format'=>'dd.mm.yyy',
+                    ],
+                ]),
+                'value'=>function(\app\models\Activity $model)
+                {
+                    return Yii::$app->formatter->asDatetime($model->finished_at);
+                }
+
+            ],
+         [
+                'attribute'=>'authorEmail',
+                'format' => 'raw',
+                'value'=>function(\app\models\User $model)
+                {
+                    return Html::a($model->email, ['/user/view', 'id'=>$model->id]);
+                }
+
+            ],
+            'author_id',
             //'main',
             //'cycle',
             //'created_at',

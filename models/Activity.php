@@ -2,6 +2,9 @@
 namespace app\models;
 use Yii;
 use app\models\Calendar;
+use Yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 /**
  * Created by PhpStorm.
  * User: evg
@@ -25,7 +28,7 @@ use app\models\Calendar;
  * @property User[] $users - список всех пользователй из календаря
  */
 
-class Activity extends \yii\db\ActiveRecord
+class Activity extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -59,13 +62,13 @@ class Activity extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'title' => 'Title',
-            'started_at' => 'Started At',
-            'finished_at' => 'Finished At',
+            'id' => '',
+            'title' => 'Название',
+            'started_at' => 'Дата и время начала',
+            'finished_at' => 'Дата и время окончания',
             'author_id' => 'author ID',
-            'main' => 'Main',
-            'cycle' => 'Cycle',
+            'main' => 'Блокирующее?',
+            'cycle' => 'Повторяющееся?',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
@@ -75,18 +78,31 @@ class Activity extends \yii\db\ActiveRecord
      */
     public function getAuthor()
     {
-        return $this->hasOne(User::class, ['id' => 'author_id']);
+        return $this->hasOne(User::className(), ['id' => 'author_id']);
     }
     public function getCalendar()
     {
-        return $this->hasMany(Calendar::class, ['activity_id' => 'id']);
+        return $this->hasMany(Calendar::className(), ['activity_id' => 'id']);
     }
 
-    public function getUsers()
+
+    public function behaviors()
     {
-        return \app\models\ActivityDao::getById($id);
-        return  $this->hasMany(User::class, ['id'=>'user_id'])
-            ->via('calendar');
-//        return $this->hasMany(User::class, ['id' => 'user_id'])->viaTable('calendar', ['user_id' => 'id']);
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at', 'updated_at'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                ],
+                'value' => new Expression('NOW()')
+            ],
+        ];
     }
+
+    /*  public function getUsers()
+      {
+          return  $this->hasMany(User::className(), ['id'=>'user_id'])
+              ->via('calendar');
+      }*/
 }

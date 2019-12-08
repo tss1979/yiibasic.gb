@@ -39,7 +39,7 @@ class TaskController extends \yii\web\Controller
                     'finished_at'=> time() + ($i+1) * 60 * 60 * 24,
                     'cycle'=> false,
                     'main'=> false,
-                    'user_id' => $i,
+                    'author_id' => $i,
             ])->execute();
         }
     }

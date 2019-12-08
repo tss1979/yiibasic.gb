@@ -8,6 +8,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
+
 /**
  * User model
  *
@@ -41,7 +42,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::class(),
+            TimestampBehavior::className(),
         ];
     }
 
@@ -56,6 +57,21 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'id' => '',
+            'username' => 'Имя',
+            'password_hash' => 'Пароль',
+            'email' => 'Адресс электронной почты',
+            'created_at'=> 'Дата и время создания',
+            'updated_at'=> 'Дата и время обновления',
+            'status'=> 'Статус',
+            'auth_key'=> 'Ключ авторизации',
+
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -63,6 +79,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
+
+
 
     /**
      * @inheritdoc
@@ -134,41 +152,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function generateAuthKey()
     {
         $this->auth_key = Yii::$app->security->generateRandomString();
-    }
-
-    public static function findByPasswordResetToken($token)
-    {
-
-        if (!static::isPasswordResetTokenValid($token)) {
-            return null;
-        }
-
-        return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
-        ]);
-    }
-
-    public static function isPasswordResetTokenValid($token)
-    {
-
-        if (empty($token)) {
-            return false;
-        }
-
-        $timestamp = (int) substr($token, strrpos($token, '_') + 1);
-        $expire = Yii::$app->params['user.passwordResetTokenExpire'];
-        return $timestamp + $expire >= time();
-    }
-
-    public function generatePasswordResetToken()
-    {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
-    }
-
-    public function removePasswordResetToken()
-    {
-        $this->password_reset_token = null;
     }
 
 }

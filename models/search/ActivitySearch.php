@@ -1,5 +1,6 @@
 <?php
 namespace app\models\search;
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Activity;
@@ -11,11 +12,14 @@ class ActivitySearch extends Activity
     /**
      * {@inheritdoc}
      */
+    public $authorEmail;
     public function rules()
     {
         return [
-            [['id', 'started_at', 'finished_at', 'user_id', 'main', 'cycle', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'finished_at', 'author_id', 'main', 'cycle', 'created_at', 'updated_at'], 'integer'],
             [['title'], 'safe'],
+            [['authorEmail'], 'string'],
+            [['started_at'], 'date', 'format' => 'php:d.m.Y'],
         ];
     }
     /**
@@ -46,12 +50,27 @@ class ActivitySearch extends Activity
             // $query->where('0=1');
             return $dataProvider;
         }
+
+        if(!empty($this->started_at))
+        {
+           $this->filterByDate('started_at', $query);
+        }
+
+        if(!empty($this->finished_at))
+        {
+            $this->filterByDate('finished_at', $query);
+        }
+
+        if (!empty($this->authorEmail))
+        {
+            $query->joinWith('author');
+            $query->andWhere(['like', 'user.email', $this->authorEmail]);
+        }
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'started_at' => $this->started_at,
             'finished_at' => $this->finished_at,
-            'user_id' => $this->user_id,
+            'author_id' => $this->author_id,
             'main' => $this->main,
             'cycle' => $this->cycle,
             'created_at' => $this->created_at,
@@ -60,4 +79,18 @@ class ActivitySearch extends Activity
         $query->andFilterWhere(['like', 'title', $this->title]);
         return $dataProvider;
     }
+
+    private function filterByDate($attr, $query)
+    {
+        $dayStart = (int)\Yii::$app->formatter->asTimestamp($this->$attr . ' 00:00:00');
+        $dayStop = (int)\Yii::$app->formatter->asTimestamp($this->$attr . ' 23:59:59');
+        $query->$this->andFilterWhere([
+            'between',
+            self::tableName() . ".$attr",
+            $dayStart,
+            $dayStop,
+        ]);
+    }
+
+
 }

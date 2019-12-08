@@ -7,7 +7,6 @@ $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Activities', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
-var_dump($model->getUsers()->createCommand()->getRawSql());
 ?>
 <div class="activity-view">
 
@@ -29,11 +28,26 @@ var_dump($model->getUsers()->createCommand()->getRawSql());
         'attributes' => [
             'id',
             'title',
-            'started_at',
-            'finished_at',
-            'main',
-            'cycle',
-            'created_at',
+            'started_at:datetime',
+            [
+                    'attribute'=>'finished_at',
+                    'label'=>'Дата и время окончания',
+                    'value'=>function(\app\models\Activity $model)
+                        {
+                             return Yii::$app->formatter->asDatetime($model->finished_at);
+                        }
+
+            ],
+            [
+                    'attributes'=>'main',
+                    'value'=>function(\app\models\Activity $model)
+                        {
+                            return $model->main ? 'Да' : 'Нет';
+                        },
+
+            ],
+            'cycle:boolean',
+            'created_at:date',
             'updated_at',
         ],
     ]) ?>

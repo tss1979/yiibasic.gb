@@ -5,7 +5,7 @@ use Yii;
  * This is the model class for table "calendar".
  *
  * @property int $id
- * @property int $user_id
+ * @property int $author_id
  * @property int $activity_id
  * @property int $created_at
  * @property int $updated_at
@@ -30,8 +30,8 @@ class Calendar extends \yii\db\ActiveRecord
         return [
             [['user_id', 'activity_id'], 'required'],
             [['user_id', 'activity_id', 'created_at', 'updated_at'], 'integer'],
-            [['activity_id'], 'exist', 'skipOnError' => true, 'targetClass' => Activity::class, 'targetAttribute' => ['activity_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['activity_id'], 'exist', 'skipOnError' => true, 'targetClass' => Activity::className(), 'targetAttribute' => ['activity_id' => 'id']],
+            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
     /**
@@ -52,13 +52,13 @@ class Calendar extends \yii\db\ActiveRecord
      */
     public function getActivity()
     {
-        return $this->hasOne(Activity::class, ['id' => 'activity_id']);
+        return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
     }
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser()
     {
-        return $this->hasOne(User::class, ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }
