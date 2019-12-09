@@ -44,6 +44,24 @@ class TaskController extends \yii\web\Controller
         }
     }
 
+    public function actionFillDb2 ()
+    {
+        for($i=1; $i < 5; $i++)
+        {
+            \Yii::$app->db->createCommand()->insert('user',
+                [
+                    'username'=> "$i User",
+                    'created_at'=> time(),
+                    'password_hash'=> $i * 60 * 60 * 24,
+                    'email'=> "user$i@mail.ru",
+                    'auth_key' => '111',
+                    'updated_at'=> time() + 2*60*24,
+
+                ])->execute();
+        }
+    }
+
+
     public function actionFillUsers()
     {
         for($i = 1; $i < 5; $i++)

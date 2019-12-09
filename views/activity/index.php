@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
 
             ],
-         [
+        /* [
                 'attribute'=>'authorEmail',
                 'format' => 'raw',
                 'value'=>function(\app\models\User $model)
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($model->email, ['/user/view', 'id'=>$model->id]);
                 }
 
-            ],
+            ],*/
             'author_id',
             //'main',
             //'cycle',

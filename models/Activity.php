@@ -4,6 +4,7 @@ use Yii;
 use app\models\Calendar;
 use Yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use yii\web\IdentityInterface;
 use yii\db\Expression;
 /**
  * Created by PhpStorm.
@@ -28,7 +29,7 @@ use yii\db\Expression;
  * @property User[] $users - список всех пользователй из календаря
  */
 
-class Activity extends ActiveRecord
+class Activity extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -99,7 +100,16 @@ class Activity extends ActiveRecord
             ],
         ];
     }
-
+    public static function findOne($condition)
+    {
+        if (Yii::$app->cache->exists(self::className() . '_' . $condition) === false) {
+            $result = parent::findOne($condition);
+            Yii::$app->cache->set(self::className() . '_' . $condition, $result);
+            return $result;
+        } else {
+            return Yii::$app->cache->get(self::className() . '_' . $condition);
+        }
+    }
     /*  public function getUsers()
       {
           return  $this->hasMany(User::className(), ['id'=>'user_id'])
