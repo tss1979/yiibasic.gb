@@ -15,7 +15,15 @@ $config = [
     ],
     'components' => [
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => \yii\caching\MemCache::className(),
+            'useMemcached' => true,
+            'servers' => [
+                [
+                    'host' => 'memcached',
+                    'port' => 11211,
+                    'persistent' => false,
+                ],
+            ],
         ],
         'log' => [
             'targets' => [
@@ -24,6 +32,10 @@ $config = [
                     'levels' => ['error', 'warning'],
                 ],
             ],
+        ],
+        'mailer' => [
+            'class'=> 'yii\swifmailer\Mailer',
+            'useFileTransport' => 'true',
         ],
         'db' => $db,
     ],

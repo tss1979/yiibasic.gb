@@ -3,16 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%alarms}}`.
+ * Handles the creation of table `{{%activity}}`.
  */
-class m191129_181007_create_alarms_table extends Migration
+class m191208_212440_create_activity_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%alarms}}', [
+        $this->createTable('activity', [
             'id' => $this->primaryKey(),
         ]);
     }
@@ -22,6 +22,6 @@ class m191129_181007_create_alarms_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%alarms}}');
+        $this->dropTable('activity');
     }
 }

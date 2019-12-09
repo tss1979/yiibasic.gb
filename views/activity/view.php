@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
             [
-                    'attributes'=>'main',
+                    'attribute'=>'main',
                     'value'=>function(\app\models\Activity $model)
                         {
                             return $model->main ? 'Да' : 'Нет';
@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'cycle:boolean',
             'created_at:date',
-            'updated_at',
+            'updated_at:date',
         ],
     ]) ?>
 
