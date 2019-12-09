@@ -3,17 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Class m191129_173908_add_foreign_key_to_activity_table
+ * Class m191207_212058_add_fk_to_activity_table
  */
-class m191129_173908_add_foreign_key_to_activity_table extends Migration
+class m191207_212058_add_fk_to_activity_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->addForeignKey('activity_user_id', 'activity', 'author_id', 'users',
-            'id');
+        $this->addForeignKey('fk-user_id-activity', 'activity', 'author_id', 'user', 'id');
     }
 
     /**
@@ -21,7 +20,7 @@ class m191129_173908_add_foreign_key_to_activity_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('activity_user_id', 'activity');
+        $this->dropForeignKey('fk-user_id-activity', 'activity');
     }
 
     /*
@@ -33,7 +32,7 @@ class m191129_173908_add_foreign_key_to_activity_table extends Migration
 
     public function down()
     {
-        echo "m191129_173908_add_foreign_key_to_activity_table cannot be reverted.\n";
+        echo "m191207_212058_add_fk_to_activity_table cannot be reverted.\n";
 
         return false;
     }

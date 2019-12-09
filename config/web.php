@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'language'=> 'ru',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -25,6 +26,10 @@ $config = [
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],
+        'formatter'=>[
+            'dateFormat'=>'php:d.m.Y',
+            'datetimeFormat' => 'php:d.m.Y H:i:s',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
