@@ -40,6 +40,7 @@ class ActivitySearch extends Activity
     public function search($params)
     {
         $query = Activity::find();
+     //   $query = $query->joinWith('user')->andWhere(['user.id'=>\Yii::$app->user->id]);
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -84,7 +85,7 @@ class ActivitySearch extends Activity
     {
         $dayStart = (int)\Yii::$app->formatter->asTimestamp($this->$attr . ' 00:00:00');
         $dayStop = (int)\Yii::$app->formatter->asTimestamp($this->$attr . ' 23:59:59');
-        $query->$this->andFilterWhere([
+        $query->andFilterWhere([
             'between',
             self::tableName() . ".$attr",
             $dayStart,

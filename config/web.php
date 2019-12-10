@@ -17,20 +17,19 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '3kWPyUZlxZMYmTkDfXv5QxMtTeDUK02K',
         ],
-       /* 'cache' => [
+       'cache' => [
             'class' => 'yii\caching\FileCache',
-        ],*/
-        'cache' => [
-            'class' => \yii\caching\MemCache::className(),
+        ],
+       /* 'cache' => [
+            'class' => 'yii\caching\MemCache',
             'useMemcached' => true,
             'servers' => [
                 [
-                    'host' => 'memcached',
+                    'host' => '127.0.0.1',
                     'port' => 11211,
-                    'persistent' => false,
                 ],
             ],
-        ],
+        ],*/
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
@@ -41,6 +40,7 @@ $config = [
         'formatter'=>[
             'dateFormat'=>'php:d.m.Y',
             'datetimeFormat' => 'php:d.m.Y H:i:s',
+            'defaultTimeZone' => 'Europe/Moscow',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -49,6 +49,7 @@ $config = [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
+
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [

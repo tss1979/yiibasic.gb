@@ -6,6 +6,7 @@ use Yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
 use yii\db\Expression;
+use app\components\behaviors\CacheBahavior;
 /**
  * Created by PhpStorm.
  * User: evg
@@ -98,6 +99,9 @@ class Activity extends \yii\db\ActiveRecord
                 ],
                 'value' => new Expression('NOW()')
             ],
+            /*CacheBehavior::className() => [
+                'class' => CacheBehavior::className(),
+            ]*/
         ];
     }
     public static function findOne($condition)
