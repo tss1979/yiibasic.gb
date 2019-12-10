@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'pluginOptions'=>[
                                 'autoclose'=> true,
                                 'todayHighlight'=>true,
-                                'format'=>'dd.mm.yyy',
+                                'format'=>'dd.mm.yyyy',
                         ],
                 ]),
                 'value'=>function(\app\models\Activity $model)
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'pluginOptions'=>[
                         'autoclose'=> true,
                         'todayHighlight'=>true,
-                        'format'=>'dd.mm.yyy',
+                        'format'=>'dd.mm.yyyy',
                     ],
                 ]),
                 'value'=>function(\app\models\Activity $model)

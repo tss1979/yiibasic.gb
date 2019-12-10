@@ -15,13 +15,12 @@ $config = [
     ],
     'components' => [
         'cache' => [
-            'class' => \yii\caching\MemCache::className(),
+            'class' => 'yii\caching\MemCache',
             'useMemcached' => true,
             'servers' => [
                 [
-                    'host' => 'memcached',
+                    'host' => '127.0.0.1',
                     'port' => 11211,
-                    'persistent' => false,
                 ],
             ],
         ],
