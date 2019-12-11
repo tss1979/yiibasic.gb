@@ -10,7 +10,7 @@ namespace app\components\behaviors;
 use yii\base\Behavior;
 use yii\db\ActiveRecord;
 
-class CacheBahavior extends Behavior
+class CacheBehavior extends Behavior
 {
     public function events()
     {

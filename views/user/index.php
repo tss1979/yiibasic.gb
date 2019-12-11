@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at:datetime',
             ['class' => 'yii\grid\ActionColumn',
                 'header'=>'Operations',
-                'template' => '{view} {delete}',
+                'template' => '{view} {delete} {create}',
             ],
         ],
     ]); ?>

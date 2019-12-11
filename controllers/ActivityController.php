@@ -1,6 +1,7 @@
-
 <?php
+
 namespace app\controllers;
+
 use Yii;
 use app\models\Activity;
 use yii\data\ActiveDataProvider;
@@ -11,6 +12,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\UploadedFile;
+
 class ActivityController extends Controller
 {
     public function behaviors()
@@ -31,10 +33,7 @@ class ActivityController extends Controller
     }
     public function actionIndex($sort = false) {
 
-        $query = Activity::find();
-        if (!Yii::$app->user->can('admin')){
-            $query->andWhere(['userID'=>Yii::$app->user->id]);
-        }
+        $query = Activity::find()->where(['author_id'=>Yii::$app->user->identity->getId()]);
         $provider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -52,17 +51,38 @@ class ActivityController extends Controller
     }
     public function actionCreate(){
         $model = new Activity();
+        $model->save();
         return $this->render('create',
             ['model' => $model]
         );
     }
     public function actionUpdate(int $id = null)
     {
+
         if(!empty($id)){
             $model = Activity::findOne($id);
-            if($model->load(Yii::$app->request->post()) and $model->validate()){
-                if($model->save()) {
-                    return $this->redirect(["activity/view?id=$model->id"]);
+             if(Yii::$app->user->identity->getId() === $model->author_id) {
+                 $this->render('update', [
+                     'model' => $model]);
+                 if ($model->load(Yii::$app->request->post()) and $model->validate()) {
+                     if ($model->save()) {
+                         return $this->redirect(["activity/view?id=$model->id"]);
+                     }
+                 }
+             }
+        }
+    }
+
+    public function actionDelete(int $id = null)
+    {
+
+        if(!empty($id)){
+            $model = Activity::findOne($id);
+            if(Yii::$app->user->identity->getId() === $model->author_id) {
+                if ($model->load(Yii::$app->request->post()) and $model->validate()) {
+                    if ($model->delete()) {
+                        return $this->redirect(["activity/view?id=$model->id"]);
+                    }
                 }
             }
             return $this->render('update', [
@@ -70,15 +90,11 @@ class ActivityController extends Controller
             ]);
         }
     }
+
     public function actionSubmit() {
         $model = new Activity();
         if($model->load(Yii::$app->request->post())) {
-            //$model->attachments = UploadedFile::getInstance($model, 'attachments');
-            if ($model->validate()) {
-                $model->save();
-                //$query = new QueryBuilder(Yii::$app->db);
-                //$params = [];
-                //echo $query->insert('activities', $model->attributes, $params);
+            if ($model->save() ) {
                 return 'Success: ' . VarDumper::export($model->attributes);
             } else {
                 return 'Failed: ' . VarDumper::export($model->errors);

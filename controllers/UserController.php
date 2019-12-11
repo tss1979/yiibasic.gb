@@ -35,9 +35,15 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'create', 'view', 'delete', 'submit'],
-                        'roles' => ['admin']
+                        'actions' => ['index'],
+                        'roles' => ['@'],
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index','create', 'view', 'delete', 'submit'],
+                        'roles' => ['admin'],
+                    ],
+
                 ],
             ],
         ];
@@ -92,10 +98,10 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+        $model = User::findOne($id);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         return $this->render('update', [
             'model' => $model,
         ]);
@@ -109,8 +115,10 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-        return $this->redirect(['index']);
+        $model = User::findOne($id);
+            $model->delete();
+            return $this->redirect(['index']);
+
     }
     /**
      * Finds the User model based on its primary key value.

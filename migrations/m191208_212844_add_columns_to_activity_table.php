@@ -14,6 +14,7 @@ class m191208_212844_add_columns_to_activity_table extends Migration
     {
         $this->addColumn('{{%activity}}', 'title', $this->string());
         $this->addColumn('{{%activity}}', 'started_at', $this->bigInteger());
+        $this->addColumn('{{%activity}}', 'description', $this->bigInteger());
         $this->addColumn('{{%activity}}', 'finished_at', $this->bigInteger());
         $this->addColumn('{{%activity}}', 'user_id', $this->integer());
         $this->addColumn('{{%activity}}', 'main', $this->boolean());

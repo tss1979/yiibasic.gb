@@ -3,6 +3,7 @@ namespace app\models;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use app\components\behaviors\CacheBehavior;
 /**
  * Class Activity
  * @package app\models
@@ -27,23 +28,26 @@ class Activity extends ActiveRecord
         return [
             [
                 'class' => BlameableBehavior::class,
-                'createdByAttribute' => 'userID',
-                'updatedByAttribute' => 'userID',
+                'createdByAttribute' => 'author_id',
+                'updatedByAttribute' => 'author_id',
             ],
             TimestampBehavior::class,
+            CacheBehavior::class => [
+                'class' => CacheBehavior::class,
+            ],
         ];
     }
     public static function tableName()
     {
-        return 'activities';
+        return 'activity';
     }
     public function attributeLabels()
     {
         return [
             'title' => 'Название',
-            'dayStart' => 'Дата начала',
-            'dayEnd' => 'Дата окончания',
-            'userID' => 'Пользователь',
+            'started_at' => 'Дата начала',
+            'finished_at' => 'Дата окончания',
+            'author_id' => 'Пользователь',
             'description' => 'Описание',
             'cycle' => 'Повторяемое событие',
             'main' => 'Блокирующее событие',
@@ -53,23 +57,26 @@ class Activity extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'dayStart', 'description'], 'required'],
+            [['title', 'started_at', 'description'], 'required'],
             [['title', 'description'], 'string'],
             [['title'], 'string', 'min' => 2, 'max' => 160],
             [['description'], 'string', 'min'=> 5],
             [['started_at', 'finished_at'], 'date', 'format' =>'php:Y-m-d'],
-            [['userID'], 'integer'],
-            [['cycle', 'isBlocked'], 'boolean'],
+            [['author_id'], 'integer'],
+            [['author_id'], 'default', 'value' => function(){
+                return \Yii::$app->user->identity->getId();
+            }],
+            [['cycle', 'main'], 'boolean'],
             ['finished_at', 'default', 'value' => function(){
                 return $this->started_at;
             }],
-            ['dayEnd','checkDayEnd']
+            ['finished_at','checkDayEnd']
             //[['attachments'], 'file', 'maxFiles' => 5],
         ];
     }
     public function checkDayEnd($strValue)
     {
-        $dayStart = strtotime($this->dayStart);
+        $dayStart = strtotime($this->started_at);
         $dayEnd = strtotime($this->$strValue);
         if ($dayEnd < $dayStart) {
             $this->addError($strValue, 'Дата окончания события не может быть раньше даты его начала!');
@@ -77,6 +84,17 @@ class Activity extends ActiveRecord
     }
     public function getUser()
     {
-        return $this -> hasOne(User::class, ['id' => 'userID']);
+        return $this -> hasOne(User::class, ['id' => 'author_id']);
+    }
+
+    public static function findOne($condition)
+    {
+        if (Yii::$app->cache->exists(self::class . '_' . $condition) === false) {
+            $result = parent::findOne($condition);
+            Yii::$app->cache->set(self::class . '_' . $condition, $result);
+            return $result;
+        } else {
+            return Yii::$app->cache->get(self::class . '_' . $condition);
+        }
     }
 }

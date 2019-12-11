@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
+            'description',
             'started_at:datetime',
             [
                     'attribute'=>'finished_at',
