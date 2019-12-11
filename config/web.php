@@ -42,7 +42,16 @@ $config = [
                 ],
             ],
         ],
+        'seo' => [
+            'class' => app\components\Seo::class,
+        ],
+
         'db' => $db,
+
+        'authManager' => [
+            'class' => yii\rbac\DbManager::class,
+        ],
+
 
         'urlManager' => [
             'enablePrettyUrl' => true,

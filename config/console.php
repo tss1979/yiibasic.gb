@@ -25,6 +25,10 @@ $config = [
                 ],
             ],
         ],
+        'authManager' => [
+            'class' => yii\rbac\DbManager::class,
+        ],
+
         'db' => $db,
     ],
     'params' => $params,
