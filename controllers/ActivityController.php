@@ -43,6 +43,7 @@ class ActivityController extends Controller
         ]);
         return $this->render('index', ['provider' => $provider]);
     }
+
     public function actionView(int $id) {
 
         $model = Activity::findOne($id);
