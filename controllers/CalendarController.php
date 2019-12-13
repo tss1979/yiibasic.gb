@@ -69,7 +69,7 @@ class CalendarController extends Controller
                 'startEditable' => false,
                 'durationEditable' => false,
                 'color' => 'red',
-                'url' => Url::to(['view', 'id'=>$activity->id]),
+                'url' => Url::to(['activity/view', 'id'=>$activity->id]),
             ]);
         }
         return $result;
